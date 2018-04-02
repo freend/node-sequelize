@@ -7,7 +7,7 @@ express3 상태와 sequelize를 학습할 목적으로 만들었습니다.<br>
 ## history
 4월 2, 2018 : 공부하던 내용을 git에 올림.
 
-##model folder
+## model folder
 
 #### required folder
 required('folder-name')으로 폴더를 호출하면
