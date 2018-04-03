@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 require('path');
 var app = express();
 
@@ -20,9 +21,13 @@ var models = require('./models'); //추가한 부분.
 //server port number.
 var port = process.env.PORT || 8080;
 
+require('./routes/index')(app);
+
+var server = http.createServer(app);
+
 //sequelize sync
-models.sequelize.sync().then( () => {
-    server.listen(port, () => {
+models.sequelize.sync().then( function() {
+    server.listen(port, function() {
     console.log("Express server has start on port : " + port);
     });
     server.on('error', onError);
@@ -30,6 +35,7 @@ models.sequelize.sync().then( () => {
 });
 
 function onError(error) {
+    console.log("err : " + error);
     if (error.syscall !== 'listen') {
         throw error;
     }

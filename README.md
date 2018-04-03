@@ -4,10 +4,7 @@ express3 상태와 sequelize를 학습할 목적으로 만들었습니다.<br>
 우선적으로 sequelize를 학습하며 추후 express4로 마이그래이션 할 예정입니다.<br>
 지극히 개인적인 내용을 적어둔 부분입니다. 다른 의견이 있으면 알려주시면 감사하겠습니다.
 
-## history
-4월 2, 2018 : 공부하던 내용을 git에 올림.
-
-##model folder
+## model folder
 
 #### required folder
 required('folder-name')으로 폴더를 호출하면
