@@ -20,6 +20,15 @@ folder-name not defined 에러가 발생한다.
 - git : “`Task.associate = function (models) {models.Task.belongsTo(models.User, {“` 으로 선언.
 - document : “`Player.belongsTo(Team);“`으로 되어있음.
 
+#### models/userCore.js
+1. 설정은 "`var tablename = sequelize.define(modelname, {column setting}, {table setting});"`
+으로 한다.
+
+## Router folder
+#### routes/index.js
+call get('/', function ~~~);에서<br>
+"`models.modelname.findAll().then(function (value) {"`으로 해야한다. 아니면 undefined error 발생.
+
 ## 참조사이트
  sequelize<p>
  [한글로 된 공부사이트](http://totuworld.github.io/2015/08/07/sequelize/)<br>
