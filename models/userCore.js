@@ -1,6 +1,4 @@
 module.exports = function (sequelize, DataTypes) {
-    // var tablename = sequelize.define(modelname, {column setting}, {table setting});
-    // return tablename
     var usercore = sequelize.define('userCores', {
         no: {
             type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true
