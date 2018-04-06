@@ -22,6 +22,8 @@ var models = require('./models'); //추가한 부분.
 var port = process.env.PORT || 8080;
 
 require('./routes/index')(app);
+require('./routes/userInfo')(app);
+require('./routes/sysCode')(app);
 
 var server = http.createServer(app);
 
