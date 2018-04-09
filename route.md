@@ -19,4 +19,8 @@ callback을 선언할 때 "`callback(null, result)"`로 선언을 하는데<br>
 stack에서 다음의 내용을 보았다.<br>
 By convention in node, the first argument to a callback is usually used to indicate an error. If it's something other than null
 대충 해석해보니 node convention에서 callback의 첫번째 항목은 error선언시에 사용하므로 애러가 아닐때 null을 넣어라 였다.<br>
-"`if (value.length === 0) return callback(null, 'No Result Error');"`에서 null을 적지 않으면 결과값에 undefined가 나옴을 알 수 있다. 
+"`if (value.length === 0) return callback(null, 'No Result Error');"`에서 null을 적지 않으면 결과값에 undefined가 나옴을 알 수 있다.
+<br>
+## 참조사이트
+ sequelize<p>
+ [참조사이트](https://proinlab.com/archives/1811)<br>
