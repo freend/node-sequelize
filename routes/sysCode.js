@@ -32,4 +32,23 @@ module.exports = function (app) {
             res.json(results);
         });
     });
+    app.get('/syscode/sample', function (req, res) {
+        async.parallel([
+            function (callback) {
+                models.sysInfo.count().then(function (value) {
+                    console.log("count : " + value);
+                    callback(null, {count: value});
+                });
+            },
+            function (callback) {
+                models.sysInfo.findAll({ offset: startNum, limit: pageListNum }).then(function (value) {
+                    console.log("list : " + value);
+                    if (value.length === 0) return callback(null, 'No Result Error');
+                    callback(null, {list: value});
+                });
+            }
+        ], function (err, result) {
+            res.json(result);
+        });
+    });
 };
