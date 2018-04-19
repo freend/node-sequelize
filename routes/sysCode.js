@@ -32,6 +32,20 @@ module.exports = function (app) {
             res.json(results);
         });
     });
+    app.post('/syscode', function (req, res) {
+        const codeName = req.body.codeName;
+        const codeTitle = req.body.codeTitle;
+        const codeIndex = req.body.codeIndex;
+        const codeText = req.body.codeText;
+        console.log("data : " + codeName + ", " + codeTitle + ", " + codeIndex + ", " + codeText);
+        models.sysInfo.create({code_name: codeName, code_title: codeTitle,
+            code_index: codeIndex, code_text: codeText}).then(function (value) {
+            console.log("insert result : " + value);
+            res.json(value);
+        }).catch(function (err) {
+            console.log("err : " + err);
+        });
+    });
     app.get('/syscode/sample', function (req, res) {
         async.parallel([
             function (callback) {
