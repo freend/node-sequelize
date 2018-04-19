@@ -21,6 +21,12 @@ By convention in node, the first argument to a callback is usually used to indic
 대충 해석해보니 node convention에서 callback의 첫번째 항목은 error선언시에 사용하므로 애러가 아닐때 null을 넣어라 였다.<br>
 "`if (value.length === 0) return callback(null, 'No Result Error');"`에서 null을 적지 않으면 결과값에 undefined가 나옴을 알 수 있다.
 <br>
+#### insert
+sequelize를 사용해서 insert를 할때 model에서 선언한 내용을 가지고 올 수 있다.<br>
+즉 "'create({"columnName": value})'"가 아닌 "'create({modelvalueName: value}))'"
+로 선언해서 데이터를 넣을 수 있다는 것이다. 여기서 데이터 베이스 입력전에 데이터 형식이나 길이 체크를 해서
+그것도 확인하는지 해볼 예정이다.
+<br>
 ## 참조사이트
  sequelize<p>
  [참조사이트](https://proinlab.com/archives/1811)<br>

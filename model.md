@@ -18,6 +18,16 @@ folder-name not defined 에러가 발생한다.
 1. 설정은 "`var tablename = sequelize.define(modelname, {column setting}, {table setting});"`
 으로 한다.
 
+#### model선언시
+4월 19, 2018 추가.
+model을 선언하면 일반적으로 "`colName {};`"으로 선언하기도 한다.
+그런데 이렇게 안해도 되는걸 알아냈다. 위와같이 적으면 예제는 다음과 같다.
+"`code_name {};`"
+이것을 좀더 컨벤션에 맞추면 다음과 같다.<br>
+"`codeName {field: 'code_name'};`"<br>
+이렇게 하면 데이터베이스의 컬럼명과 선언명을 다르게 해도 된다는 것을 알았다.
+내일 한번 해봐야겠다.
+
 ## 참조사이트
  sequelize<p>
  [한글로 된 공부사이트](http://totuworld.github.io/2015/08/07/sequelize/)<br>
