@@ -25,7 +25,10 @@ By convention in node, the first argument to a callback is usually used to indic
 sequelize를 사용해서 insert를 할때 model에서 선언한 내용을 가지고 올 수 있다.<br>
 즉 "'create({"columnName": value})'"가 아닌 "'create({modelvalueName: value}))'"
 로 선언해서 데이터를 넣을 수 있다는 것이다. 여기서 데이터 베이스 입력전에 데이터 형식이나 길이 체크를 해서
-그것도 확인하는지 해볼 예정이다.
+그것도 확인하는지 해볼 예정이다.<br>
+1. 문자열의 길이보다 긴 경우 : 문자열 만큼 하고 자른다.
+2. 숫자인데 문자열이 들어간 경우 : 0으로 데이터를 넣는다.<br>
+데이터가 문제를 발생할 경우를 어느정도 줄일 수 있을거라 생각한다.
 <br>
 ## 참조사이트
  sequelize<p>
