@@ -6,3 +6,5 @@
 4월 6, 2018 : async test<br>
 4월 9, 2018 : async series test node callback(null, result) check<br>
 4월 10, 2018 : async parallel test<br>
+4월 19, 2018 : sequelize create command test.
+4월 20, 2018 : sequelize check not equal data type, integer type DB field insert string value test
