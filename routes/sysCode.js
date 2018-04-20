@@ -38,8 +38,8 @@ module.exports = function (app) {
         const codeIndex = req.body.codeIndex;
         const codeText = req.body.codeText;
         console.log("data : " + codeName + ", " + codeTitle + ", " + codeIndex + ", " + codeText);
-        models.sysInfo.create({code_name: codeName, code_title: codeTitle,
-            code_index: codeIndex, code_text: codeText}).then(function (value) {
+        models.sysInfo.create({codeName: codeName, codeTitle: codeTitle,
+            codeIndex: codeIndex, codeText: codeText}).then(function (value) {
             console.log("insert result : " + value);
             res.json(value);
         }).catch(function (err) {

@@ -1,19 +1,19 @@
 module.exports = function (sequelize, DataTypes) {
     var sysinfo = sequelize.define('sysInfo', {
-        code_seq: {
-            type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true
+        codeSeq: {
+            type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true, field: 'code_seq'
         },
-        code_name: {
-            type: DataTypes.STRING(45)
+        codeName: {
+            type: DataTypes.STRING(45), field: 'code_name'
         },
-        code_title: {
-            type: DataTypes.STRING(45)
+        codeTitle: {
+            type: DataTypes.STRING(45), field: 'code_title'
         },
-        code_index: {
-            type: DataTypes.STRING(6)
+        codeIndex: {
+            type: DataTypes.STRING(6), field: 'code_index'
         },
-        code_text: {
-            type: DataTypes.STRING(45)
+        codeText: {
+            type: DataTypes.STRING(45), field: 'code_text'
         }
     },{
         classMethods: {},
