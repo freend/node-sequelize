@@ -3,15 +3,16 @@ const models = require('../models');
 const async = require('async');
 
 // 1page view number
-const pageListNum = 20;
+const pageListNum = 10;
 var startNum = 0;
 
 module.exports = function (app) {
-    app.get('/syscode/list/:pageNum', function (req, res) {
+    app.get('/parallel/list/:pageNum', function (req, res) {
         const pageNum = req.params.pageNum;
         console.log("path : " + req.route.path + ", " + pageNum);
         startNum = (pageNum - 1) * pageListNum;
-        var tasks = [
+        var timestamp = new Date().getTime();
+        async.parallel([
             function (callback) {
                 models.sysInfo.count().then(function (value) {
                     console.log("count : " + value);
@@ -20,16 +21,13 @@ module.exports = function (app) {
             },
             function (callback) {
                 models.sysInfo.findAll({ offset: startNum, limit: pageListNum }).then(function (value) {
-                    console.log("list : " + value);
+                    console.log("time : " + String(new Date().getTime() - timestamp));
                     if (value.length === 0) return callback(null, 'No Result Error');
                     callback(null, {list: value});
                 });
             }
-        ];
-
-        async.series(tasks, function (err, results) {
-            console.log(results);
-            res.json(results);
+        ], function (err, result) {
+            res.json(result);
         });
     });
     app.post('/syscode', function (req, res) {
@@ -46,23 +44,28 @@ module.exports = function (app) {
             console.log("err : " + err);
         });
     });
-    app.get('/syscode/sample', function (req, res) {
-        async.parallel([
-            function (callback) {
-                models.sysInfo.count().then(function (value) {
-                    console.log("count : " + value);
-                    callback(null, {count: value});
-                });
-            },
-            function (callback) {
-                models.sysInfo.findAll({ offset: startNum, limit: pageListNum }).then(function (value) {
-                    console.log("list : " + value);
-                    if (value.length === 0) return callback(null, 'No Result Error');
-                    callback(null, {list: value});
-                });
-            }
-        ], function (err, result) {
-            res.json(result);
+    app.put('/syscode', function (req, res) {
+        const codeSeq = req.body.codeSeq;
+        const codeName = req.body.codeName;
+        const codeTitle = req.body.codeTitle;
+        const codeIndex = req.body.codeIndex;
+        const codeText = req.body.codeText;
+        models.sysInfo.update({codeName: codeName, codeTitle: codeTitle,
+            codeIndex: codeIndex, codeText: codeText}, {where:{codeSeq: codeSeq}})
+            .then(function (value) {
+                res.json(value);
+            })
+            .catch(function (reason) {
+                res.json(reason);
+            });
+    });
+    app.get('/syscode/list/:pageNum', function (req, res) {
+        const pageNum = req.params.pageNum;
+        startNum = (pageNum - 1) * pageListNum;
+        models.sysInfo.findAndCountAll({ offset: startNum, limit: pageListNum }).then(function (value) {
+            console.log("result : " + value.rows + ", " + value.count);
+            value.pageNum = pageNum;
+            res.json(value);
         });
     });
 };

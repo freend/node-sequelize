@@ -3,7 +3,12 @@
 call get('/', function ~~~);에서<br>
 "`var sysinfo = sequelize.define('sysInfo', {"`이면<br>
 "`models.sysInfo.findAll().then(function (value) {"`으로 해야한다. 아니면 undefined error 발생.
-
+#### list
+일반적으로 게시판의 경우 해당 값의 수량과 내용을 동시에 가져와야 하는 경우가 많다.
+그래서 사용하던게 count와 findAll이였는데 documents를 뒤지다가 다음과 같은
+명령을 찾게 되었다. findAndCountAll 말 그대로 카운트와 리스트를 같이 보여주는
+명령이다.
+하면 result.count로 수량이 result.rows로 list가 나오게 된다.
 #### async
 node 는 비동기화 함수로 여려번의 쿼리를 실행했을 때 먼저 결과가 나온걸 반환한다.<br>
 그것을 동기화 방식으로 만들기 위해서 사용하는게 async이다. 
@@ -30,6 +35,13 @@ sequelize를 사용해서 insert를 할때 model에서 선언한 내용을 가�
 2. 숫자인데 문자열이 들어간 경우 : 0으로 데이터를 넣는다.<br>
 데이터가 문제를 발생할 경우를 어느정도 줄일 수 있을거라 생각한다.
 <br>
+#### update
+update 문은 바뀐 내용과 조건으로 사용할 내용을 같이 올려서 create문과 find문의
+합성으로 사용하듯이 사용하면 된다.
+update가 정상적으로 되면 1 업데이트가 되지 않으면 0을 반환한다.
 ## 참조사이트
  sequelize<p>
+ [참조사이트 생성](http://totuworld.github.io/2015/08/07/sequelize/)<br>
+ [참조사이트 쿼리](https://hyunseob.github.io/2016/03/27/usage-of-sequelize-js/)<br>
+ node async<p>
  [참조사이트](https://proinlab.com/archives/1811)<br>
