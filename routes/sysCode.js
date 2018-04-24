@@ -59,6 +59,16 @@ module.exports = function (app) {
                 res.json(reason);
             });
     });
+    app.delete('/syscode/:codeSeq', function (req, res) {
+        const delSeq = req.params.codeSeq;
+        models.sysInfo.destroy({where: {codeSeq:delSeq}})
+            .then(function (value) {
+                res.json(value);
+            })
+            .catch(function (reason) {
+                res.json(reason);
+            });
+    });
     app.get('/syscode/list/:pageNum', function (req, res) {
         const pageNum = req.params.pageNum;
         startNum = (pageNum - 1) * pageListNum;

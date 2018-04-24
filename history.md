@@ -9,3 +9,4 @@
 4월 19, 2018 : sequelize create command test.
 4월 20, 2018 : sequelize check not equal data type, integer type DB field insert string value test<br>
 4월 23, 2018 : sequelize update query.
+4월 24, 2018 : sequelize delete query.

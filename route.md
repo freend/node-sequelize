@@ -38,10 +38,13 @@ sequelize를 사용해서 insert를 할때 model에서 선언한 내용을 가�
 #### update
 update 문은 바뀐 내용과 조건으로 사용할 내용을 같이 올려서 create문과 find문의
 합성으로 사용하듯이 사용하면 된다.
-update가 정상적으로 되면 1 업데이트가 되지 않으면 0을 반환한다.
+update가 정상적으로 되면 1 update가 되지 않으면 0을 반환한다.
+#### delete
+find 문과 비슷하게 "`{where: {col_name: value}}`"로 삭제할 목록을 가져온다.
+delete가 정상적으로 되면 1 delete가 되지 않으면 0을 반환한다.
 ## 참조사이트
  sequelize<p>
- [참조사이트 생성](http://totuworld.github.io/2015/08/07/sequelize/)<br>
- [참조사이트 쿼리](https://hyunseob.github.io/2016/03/27/usage-of-sequelize-js/)<br>
+ [참조사이트 sequelize 생성](http://totuworld.github.io/2015/08/07/sequelize/)<br>
+ [참조사이트 sequelize 쿼리](https://hyunseob.github.io/2016/03/27/usage-of-sequelize-js/)<br>
  node async<p>
  [참조사이트](https://proinlab.com/archives/1811)<br>
