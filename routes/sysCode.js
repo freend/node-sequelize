@@ -1,6 +1,7 @@
 "use stricts";
 const models = require('../models');
 const async = require('async');
+// const utilLangeage = require('../customUtil/utilLanguage');
 
 // 1page view number
 const pageListNum = 10;
@@ -14,13 +15,13 @@ module.exports = function (app) {
         var timestamp = new Date().getTime();
         async.parallel([
             function (callback) {
-                models.sysInfo.count().then(function (value) {
+                models.codeInfo.count().then(function (value) {
                     console.log("count : " + value);
                     callback(null, {count: value});
                 });
             },
             function (callback) {
-                models.sysInfo.findAll({ offset: startNum, limit: pageListNum }).then(function (value) {
+                models.codeInfo.findAll({ offset: startNum, limit: pageListNum }).then(function (value) {
                     console.log("time : " + String(new Date().getTime() - timestamp));
                     if (value.length === 0) return callback(null, 'No Result Error');
                     callback(null, {list: value});
@@ -36,7 +37,7 @@ module.exports = function (app) {
         const codeIndex = req.body.codeIndex;
         const codeText = req.body.codeText;
         console.log("data : " + codeName + ", " + codeTitle + ", " + codeIndex + ", " + codeText);
-        models.sysInfo.create({codeName: codeName, codeTitle: codeTitle,
+        models.codeInfo.create({codeName: codeName, codeTitle: codeTitle,
             codeIndex: codeIndex, codeText: codeText}).then(function (value) {
             console.log("insert result : " + value);
             res.json(value);
@@ -50,7 +51,7 @@ module.exports = function (app) {
         const codeTitle = req.body.codeTitle;
         const codeIndex = req.body.codeIndex;
         const codeText = req.body.codeText;
-        models.sysInfo.update({codeName: codeName, codeTitle: codeTitle,
+        models.codeInfo.update({codeName: codeName, codeTitle: codeTitle,
             codeIndex: codeIndex, codeText: codeText}, {where:{codeSeq: codeSeq}})
             .then(function (value) {
                 res.json(value);
@@ -61,7 +62,7 @@ module.exports = function (app) {
     });
     app.delete('/syscode/:codeSeq', function (req, res) {
         const delSeq = req.params.codeSeq;
-        models.sysInfo.destroy({where: {codeSeq:delSeq}})
+        models.codeInfo.destroy({where: {codeSeq:delSeq}})
             .then(function (value) {
                 res.json(value);
             })
@@ -72,9 +73,12 @@ module.exports = function (app) {
     app.get('/syscode/list/:pageNum', function (req, res) {
         const pageNum = req.params.pageNum;
         startNum = (pageNum - 1) * pageListNum;
-        models.sysInfo.findAndCountAll({ offset: startNum, limit: pageListNum }).then(function (value) {
+        models.codeInfo.findAndCountAll({ offset: startNum, limit: pageListNum }).then(function (value) {
             console.log("result : " + value.rows + ", " + value.count);
             value.pageNum = pageNum;
+            for (var idx in value.rows) {
+                value.rows[idx].codeText = res.__(value.rows[idx].codeText);
+            }
             res.json(value);
         });
     });

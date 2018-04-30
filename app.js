@@ -3,6 +3,8 @@ const http = require('http');
 require('path');
 var app = express();
 
+var i18n = require('./i18n');
+app.use(i18n);
 ////////////view page setting///////////////
 var bodyParser = require('body-parser');
 app.set('views', __dirname + '/views');
