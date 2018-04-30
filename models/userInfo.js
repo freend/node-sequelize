@@ -1,34 +1,32 @@
 module.exports = function (sequelize, DataTypes) {
     var userinfo = sequelize.define('userInfo', {
-        user_seq: {
-            type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true
+        seq: {
+            type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true, field: 'user_seq'
         },
-        user_access_key: {
-            type: DataTypes.STRING(50)
+        accessKey: {
+            type: DataTypes.STRING(50), field: 'user_access_key'
         },
-        user_id: {
-            type: DataTypes.STRING(50)
+        id: {
+            type: DataTypes.STRING(50), field: 'user_id'
         },
-        user_password: {
-            type: DataTypes.STRING(50)
+        password: {
+            type: DataTypes.STRING(50), field: 'user_password'
         },
-        user_name: {
-            type: DataTypes.STRING(50)
+        name: {
+            type: DataTypes.STRING(50), field: 'user_name'
         },
-        user_birthday: {
-            type: DataTypes.DATE
+        //이부분은 사용하지 않을 것이기에 주석처리 해놓습니다.
+        /*user_birthday: {
+            type: DataTypes.DATE, field: 'code_seq'
+        },*/
+        state: {
+            type: DataTypes.STRING(4), field: 'user_state'
         },
-        user_country: {
-            type: DataTypes.STRING(5)
+        signDate: {
+            type: DataTypes.INTEGER.UNSIGNED, field: 'user_sign_date'
         },
-        user_type: {
-            type: DataTypes.STRING(2)
-        },
-        last_date: {
-            type: DataTypes.DATE
-        },
-        reg_date: {
-            type: DataTypes.DATE
+        lastAccess: {
+            type: DataTypes.INTEGER.UNSIGNED, field: 'user_last_access'
         }
     },{
         classMethods: {},
