@@ -14,9 +14,11 @@ folder-name not defined 에러가 발생한다.
 - git : “`Task.associate = function (models) {models.Task.belongsTo(models.User, {“` 으로 선언.
 - document : “`Player.belongsTo(Team);“`으로 되어있음.
 
-#### models/userCore.js
+#### models/userInfo.js
 1. 설정은 "`var tablename = sequelize.define(modelname, {column setting}, {table setting});"`
 으로 한다.
+2. birthday는 현재 사용 안할 예정이므로 주석처리 합니다.
+3. 모든 날자형식은 unixTimeStamp를 사용할 것이다.
 
 #### model선언시
 4월 19, 2018 추가.
