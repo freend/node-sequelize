@@ -1,3 +1,5 @@
 {
-  "userAdmin": "zzzzzzzzzzzzzzzzz"
+	"userLevelAdmin": "admin user",
+	"userLevelSales": "sales user",
+	"userLevelNormal": "user"
 }
