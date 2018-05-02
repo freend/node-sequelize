@@ -73,7 +73,12 @@ module.exports = function (app) {
     app.get('/syscode/list/:pageNum', function (req, res) {
         const pageNum = req.params.pageNum;
         startNum = (pageNum - 1) * pageListNum;
-        models.codeInfo.findAndCountAll({ offset: startNum, limit: pageListNum }).then(function (value) {
+        models.codeInfo.findAndCountAll({
+                attributes: ['code_name', 'code_title'],
+                group: 'code_title',
+                offset: startNum,
+                limit: pageListNum
+            }).then(function (value) {
             console.log("result : " + value.rows + ", " + value.count);
             value.pageNum = pageNum;
             for (var idx in value.rows) {

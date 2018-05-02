@@ -8,7 +8,9 @@ call get('/', function ~~~);에서<br>
 그래서 사용하던게 count와 findAll이였는데 documents를 뒤지다가 다음과 같은
 명령을 찾게 되었다. findAndCountAll 말 그대로 카운트와 리스트를 같이 보여주는
 명령이다.
-하면 result.count로 수량이 result.rows로 list가 나오게 된다.
+하면 result.count로 수량이 result.rows로 list가 나오게 된다.<br>
+그런데 sysCode의 리스트는 'code_title'에 의해 그룹이 묶여서 나와야 한다. 그런데 
+findAndCountAll을 쓰면 group by가 나중에 되므로 count가 맞지 않는 문제가 생긴다.
 #### async
 node 는 비동기화 함수로 여려번의 쿼리를 실행했을 때 먼저 결과가 나온걸 반환한다.<br>
 그것을 동기화 방식으로 만들기 위해서 사용하는게 async이다. 
