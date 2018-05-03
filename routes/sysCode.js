@@ -74,8 +74,9 @@ module.exports = function (app) {
         const pageNum = req.params.pageNum;
         startNum = (pageNum - 1) * pageListNum;
         models.codeInfo.findAndCountAll({
-                attributes: ['code_name', 'code_title'],
-                group: 'code_title',
+                distinct: true,
+                col: 'code_title',
+                attributes: [[models.sequelize.fn('DISTINCT', models.sequelize.col('code_title')), 'codeTitle'], ['code_name', 'codeName']],
                 offset: startNum,
                 limit: pageListNum
             }).then(function (value) {
