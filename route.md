@@ -48,5 +48,6 @@ delete가 정상적으로 되면 1 delete가 되지 않으면 0을 반환한다.
  sequelize<p>
  [참조사이트 sequelize 생성](http://totuworld.github.io/2015/08/07/sequelize/)<br>
  [참조사이트 sequelize 쿼리](https://hyunseob.github.io/2016/03/27/usage-of-sequelize-js/)<br>
+ [참조사이트 sequelize 쿼리2](http://blog.jeonghwan.net/sequalize-%EC%BF%BC%EB%A6%AC/)
  node async<p>
  [참조사이트](https://proinlab.com/archives/1811)<br>
