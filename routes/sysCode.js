@@ -8,29 +8,29 @@ const pageListNum = 10;
 var startNum = 0;
 
 module.exports = function (app) {
-    app.get('/parallel/list/:pageNum', function (req, res) {
-        const pageNum = req.params.pageNum;
-        console.log("path : " + req.route.path + ", " + pageNum);
-        startNum = (pageNum - 1) * pageListNum;
-        var timestamp = new Date().getTime();
-        async.parallel([
-            function (callback) {
-                models.codeInfo.count().then(function (value) {
-                    console.log("count : " + value);
-                    callback(null, {count: value});
-                });
-            },
-            function (callback) {
-                models.codeInfo.findAll({ offset: startNum, limit: pageListNum }).then(function (value) {
-                    console.log("time : " + String(new Date().getTime() - timestamp));
-                    if (value.length === 0) return callback(null, 'No Result Error');
-                    callback(null, {list: value});
-                });
-            }
-        ], function (err, result) {
-            res.json(result);
-        });
+    /**
+     * detail code group list.
+     */
+    app.get('/syscode/detail/:codeName', function (req, res) {
+        const codeName = req.params.codeName;
+        console.log("path : " + req.route.path + ", " + codeName);
+        models.codeInfo.findAll(
+            {where: {
+                'code_name': codeName}
+            })
+            .then(function (value) {
+                for (var idx in value) {
+                    value[idx].codeText = res.__(value[idx].codeText);
+                }
+                res.json(value);
+            })
+            .catch(function (reason) {
+                console.log(reason);
+            });
     });
+    /**
+     * add code
+     */
     app.post('/syscode', function (req, res) {
         const codeName = req.body.codeName;
         const codeTitle = req.body.codeTitle;
@@ -45,6 +45,9 @@ module.exports = function (app) {
             console.log("err : " + err);
         });
     });
+    /**
+     * update code
+     */
     app.put('/syscode', function (req, res) {
         const codeSeq = req.body.codeSeq;
         const codeName = req.body.codeName;
@@ -60,6 +63,9 @@ module.exports = function (app) {
                 res.json(reason);
             });
     });
+    /**
+     * delete code
+     */
     app.delete('/syscode/:codeSeq', function (req, res) {
         const delSeq = req.params.codeSeq;
         models.codeInfo.destroy({where: {codeSeq:delSeq}})
@@ -70,21 +76,20 @@ module.exports = function (app) {
                 res.json(reason);
             });
     });
+    /**
+     * list distinct title.
+     */
     app.get('/syscode/list/:pageNum', function (req, res) {
         const pageNum = req.params.pageNum;
         startNum = (pageNum - 1) * pageListNum;
         models.codeInfo.findAndCountAll({
                 distinct: true,
-                col: 'code_title',
-                attributes: [[models.sequelize.fn('DISTINCT', models.sequelize.col('code_title')), 'codeTitle'], ['code_name', 'codeName']],
+                col: 'code_name',
+                attributes: [[models.sequelize.fn('DISTINCT', models.sequelize.col('code_name')), 'codeName'], ['code_title', 'codeTitle']],
                 offset: startNum,
                 limit: pageListNum
             }).then(function (value) {
-            console.log("result : " + value.rows + ", " + value.count);
             value.pageNum = pageNum;
-            for (var idx in value.rows) {
-                value.rows[idx].codeText = res.__(value.rows[idx].codeText);
-            }
             res.json(value);
         });
     });
