@@ -1,7 +1,5 @@
 "use stricts";
 const models = require('../models');
-const async = require('async');
-// const utilLangeage = require('../customUtil/utilLanguage');
 
 // 1page view number
 const pageListNum = 10;
