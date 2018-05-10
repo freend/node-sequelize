@@ -1,5 +1,7 @@
 {
 	"userLevelAdmin": "admin user",
 	"userLevelSales": "sales user",
-	"userLevelNormal": "user"
+	"userLevelNormal": "user",
+	"isComplete": "process complete.",
+	"notComplete": "process not Complete"
 }

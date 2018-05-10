@@ -1,5 +1,7 @@
 {
 	"userLevelAdmin": "관리자",
 	"userLevelSales": "판매자",
-	"userLevelNormal": "일반사용자"
+	"userLevelNormal": "일반사용자",
+    "isComplete": "정상적으로 처리되었습니다.",
+    "notComplete": "정상적으로 처리되지 않았습니다. 잠시후 다시 해 주시기 바랍니다."
 }
