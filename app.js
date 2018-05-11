@@ -1,11 +1,26 @@
 const express = require('express');
 const http = require('http');
+const session = require('express-session');
 require('path');
 var app = express();
-
+/**
+ * multi language setting
+ */
 var i18n = require('./i18n');
 app.use(i18n);
-////////////view page setting///////////////
+/**
+ * log file setting
+ */
+const opts = {
+    logDirectory:'log',
+    fileNamePattern:'log-<DATE>.log',
+    timestampFormat:'YYYY-MM-DD HH:mm:ss.SSS'
+};
+const log = require('simple-node-logger').createRollingFileLogger( opts );
+log.setLevel('debug');
+/**
+ * view page setting
+ */
 var bodyParser = require('body-parser');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -17,15 +32,22 @@ app.use(bodyParser.urlencoded({extended : true}));
 //use setting ajax
 app.use(express.static('scripts'));
 
+//use setting session
+app.use(session({
+    secret: '@#@sequelizeSample#@$#$',
+    resave: false,
+    saveUninitialized: true
+}));
+
 //sequelize setting
 var models = require('./models'); //추가한 부분.
 
 //server port number.
 var port = process.env.PORT || 8080;
 
-require('./routes/index')(app);
-require('./routes/userInfo')(app);
-require('./routes/sysCode')(app);
+require('./routes/index')(app, log);
+require('./routes/userInfo')(app, log);
+require('./routes/sysCode')(app, log);
 
 var server = http.createServer(app);
 
