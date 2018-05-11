@@ -5,7 +5,7 @@ const models = require('../models');
 const pageListNum = 10;
 var startNum = 0;
 
-module.exports = function (app) {
+module.exports = function (app, log) {
     /**
      * detail code group list.
      */
