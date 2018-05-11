@@ -1,11 +1,18 @@
 "use stricts";
 const models = require('../models');
 const dateUtil = require('../customUtil/utilDateTime');
-const resultData = require('../customUtil/utilResult');
+const utilResult = require('../customUtil/utilResult');
+const common = require('../customUtil/common');
 
-module.exports = function (app) {
+module.exports = function (app, log) {
+    /**
+     * 사용 모드는 총 3가지이다. mobile, web, admin
+     * 이중 mobile은 json으로 값을 넘겨주고
+     * 나머지는 ejs page로 값이 나오게 할 예정이다.
+     */
     app.get('/user/sample', function (req, res) {
-        console.log("path : " + req.route.path + ", sample");
+        log.info("path : " + req.route.path);
+
         var sample = Object.create(resultData.resultObj);
         sample.msg = "aa";
         console.log("first : " + sample.msg);
@@ -21,7 +28,7 @@ module.exports = function (app) {
      * add user
      */
     app.post('/user/signup', function (req, res) {
-        const userId = req.body.userId;
+        const userId = null;//req.body.userId;
         const userPw = req.body.userPw;
         const userName = req.body.userName;
         const nowStamp = dateUtil.doGetNowToTimeStamp();
@@ -31,7 +38,7 @@ module.exports = function (app) {
         const accessKey = require('uuid/v1')();
 
         models.userInfo.create({id: userId, password: userPw, name:userName, signDate: nowStamp,
-            lastAccess:nowStamp, accessKey: accessKey, state: 'U'})
+            lastAccess:nowStamp, accessKey: accessKey, state: 'U'}, {logging: log.debug})
         .then(function (value) {
             /**
              * 5월 9, 2018 return data인 value는 const로 와서 수정이 불가능 하다 따라서 별도의 obj를 만들어서
@@ -39,22 +46,19 @@ module.exports = function (app) {
              * @type {{id, name, accessKey: *|accessKey|{type, field}|string, state}}
              */
             const resultValue = {id: value.id, name: value.name, accessKey:value.accessKey, state:value.state};
-            var isData = Object.create(resultData.resultObj);
-            isData.isProcess = true;
-            isData.msg = res.__("isComplete");
-            isData.isData = resultValue;
-            /*var isData = {msg: res.__("isComplete"),
-                    isData: resultValue
-                };*/
-            res.json(isData);
+            var resultDataSet = Object.create(utilResult.resultForm);
+            resultDataSet.isProcess = true;
+            resultDataSet.msg = res.__("isComplete");
+            resultDataSet.isData = resultValue;
+            res.json(resultDataSet);
         })
         .catch(function (value) {
-            //TODO-freend : 여기는 추후 로그로 만들어 줄 예정입니다.
-            console.log("ERROR : " + value.original.sql);
-            var isData = Object.create(resultData.resultObj);
-            isData.msg = res.__("notComplete");
-            isData.isProcess = false;
-            res.json(isData);
+            log.error(value.original.sql);
+            var resultDataSet = Object.create(utilResult.resultForm);
+            resultDataSet.msg = res.__("notComplete");
+            resultDataSet.isProcess = false;
+            res.json(resultDataSet);
         });
-    })
+    });
+
 };
