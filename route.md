@@ -44,6 +44,8 @@ update가 정상적으로 되면 1 update가 되지 않으면 0을 반환한다.
 #### delete
 find 문과 비슷하게 "`{where: {col_name: value}}`"로 삭제할 목록을 가져온다.
 delete가 정상적으로 되면 1 delete가 되지 않으면 0을 반환한다.
+#### routes/index.js
+5월 11, 2018 : 지금 web, mobile 혼용 모델을 실험중이였다 오늘 예상값은 모바일/웹을 따로 받아서 같은 service를 하고 결과를 되돌리는 방향이 제일 유력해 보인다. 
 ## 참조사이트
  sequelize<p>
  [참조사이트 sequelize 생성](http://totuworld.github.io/2015/08/07/sequelize/)<br>
