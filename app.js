@@ -38,6 +38,21 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+/**
+ * 모든 관리자 페이지의 로그인 세션을 확인하는 부분입니다.
+ * 지금은 특정모드를 확인하기 위해서 web에서 걸리게 만들어야 한다.
+ */
+app.all('/wshop/web*', function (req, res, next) {
+    console.log('path', req.route.path);
+    console.log('check a', req.session.userIdSession);
+    if(req.session.userIdSession == undefined) {
+        console.log('not login');
+        res.redirect('/wshop/common/login');
+    }
+    else {
+        next();
+    }
+});
 
 //sequelize setting
 var models = require('./models'); //추가한 부분.

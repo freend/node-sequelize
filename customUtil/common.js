@@ -22,15 +22,4 @@ module.exports.doGetInsertUpdateMsg = function (result) {
         msg = "등록에 실패하였습니다.";
     }
     return msg;
-}
-module.exports.doGetSessionCheck = function (req, res, type) {
-    const userId = req.session.userIdSession;
-    console.log("type : " + type);
-    if(userId == null && type != 'mobile') {
-        console.log("return web page");
-        res.redirect("/wshop/common/login");
-    }
-    else {
-        console.log("not return page");
-    }
-}
+};

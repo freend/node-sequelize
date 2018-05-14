@@ -12,20 +12,20 @@ module.exports = function (app, log) {
      * 나머지는 ejs page로 값이 나오게 할 예정이다.
      * 확인 결과 정상적으로 두개를 읽어드릴 수 있음을 확인함.
      */
+    /**
+     * parameter를 웹과 앱은 나누는 방향으로 결정.?
+     */
     app.post('/wshop/:type', function (req, res) {
-        console.log("post : " + req.route.path);
+        console.log(req.route.path, 'post');
         const mode = req.params.type;
-        const names = req.body.name;
-        common.doGetSessionCheck(req, res, mode);
         var resultDataSet = Object.create(utilResult.resultForm);
         resultDataSet.isProcess = true;
-        resultDataSet.isData = {type: mode, name:names};
+        resultDataSet.isData = {type: mode};
         pageSet.doGetResultPage(req, res, resultDataSet);
     });
-    app.get('/wshop/:type', function (req, res) {
-        console.log("get : " + req.route.path);
+    app.get('/wshop/:type/list', function (req, res) {
+        console.log(req.route.path, 'get');
         const mode = req.params.type;
-        common.doGetSessionCheck(req, res, mode);
         var resultDataSet = Object.create(utilResult.resultForm);
         resultDataSet.isProcess = true;
         resultDataSet.isData = {mode: mode};
@@ -33,11 +33,21 @@ module.exports = function (app, log) {
         pageSet.doGetResultPage(req, res, resultDataSet);
     });
     app.get('/wshop/:type/login', function (req, res) {
+        console.log(req.route.path, 'get');
         const userMode = req.params.type;
         var resultDataSet = Object.create(utilResult.resultForm);
         resultDataSet.isProcess = true;
-        resultDataSet.isData = {mode: userMode};
         resultDataSet.viewPage = 'common/login';
+        pageSet.doGetResultPage(req, res, resultDataSet);
+    });
+    app.post('/wshop/:type/login', function (req, res) {
+        console.log(req.route.path, 'post');
+        const userMode = req.params.type;
+        var resultDataSet = Object.create(utilResult.resultForm);
+        req.session.userIdSession = req.body.id;
+        resultDataSet.isProcess = true;
+        resultDataSet.isData = {mode: userMode, id: req.body.id, pass: req.body.pass};
+
         pageSet.doGetResultPage(req, res, resultDataSet);
     });
 };
