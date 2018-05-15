@@ -63,6 +63,7 @@ var port = process.env.PORT || 8080;
 require('./routes/index')(app, log);
 require('./routes/userInfo')(app, log);
 require('./routes/sysCode')(app, log);
+require('./routes/admin/product')(app, log);
 
 var server = http.createServer(app);
 
