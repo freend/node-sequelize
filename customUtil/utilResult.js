@@ -8,5 +8,5 @@ module.exports.resultForm = {
     //클라이언트에서 보여주는 메세지.
     msg: "",
     //클라이언트에 들어가는 데이터
-    isData:{}
+    isData: null
 };
