@@ -3,3 +3,4 @@ config/*.*
 .idea
 node_modules
 routes/sample.js
+public/*.*
