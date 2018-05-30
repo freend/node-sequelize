@@ -3,7 +3,8 @@
  * date to timestamp
  */
 module.exports.doGetNowToTimeStamp = function () {
-    return new Date().getTime() / 1000;
+    var stamp = "" + new Date().getTime() / 1000;
+    return stamp.split('.')[0];
 };
 /**
  * 지역시간을 유닉스 타임 형식으로 변환합니다.
