@@ -3,5 +3,7 @@
 	"userLevelSales": "sales user",
 	"userLevelNormal": "user",
 	"isComplete": "process complete.",
-	"notComplete": "process not Complete"
+	"notComplete": "process not Complete",
+	"prodNameTumbler": "Tumbler",
+	"prodNameCosmetics": "Cosmetics"
 }
