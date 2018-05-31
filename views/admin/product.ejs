@@ -1,0 +1,33 @@
+<%- include('../common/head'); %>
+        <div class="container">
+            <form class="form-group" action="/wshop/admin/product" method="post">
+                <div>
+                    <label>제품명</label>
+                    <input type="text" class="form-control" name="prodName" placeholder="제품명을 입력하세요">
+                </div>
+                <div>
+                    <label>가격</label>
+                    <input type="text" class="form-control" name="prodPrice" placeholder="제품가격을 입력하세요">
+                </div>
+                <div>
+                    <label>입고수량</label>
+                    <input type="text" class="form-control" name="prodStock" placeholder="입고수량을 입력하세요">
+                </div>
+                <div>
+                    <label>상품위치</label>
+                    <input type="text" class="form-control" name="prodPosition" placeholder="제품보관 위치를 입력하세요">
+                </div>
+                <div>
+                    <label>제품분류</label>
+                    <select>
+                        <% for(var i=0; i < isData.category.length; i++){%>
+                            <option value="<%= isData.category[i]['codeIndex']%>"><%= isData.category[i]['codeText']%></option>
+                        <%}%>
+                    </select>
+                    <input type="text" class="form-control" name="prodPosition" placeholder="제품보관 위치를 입력하세요">
+                </div>
+                <button type="submit" class="btn btn-default">제출</button>
+            </form>
+        </div>
+    </body>
+</html>

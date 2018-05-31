@@ -26,24 +26,42 @@ module.exports = function (app, log) {
         resultData.isProcess = true;
         pageSet.doGetResultPage(req, res, resultData);
     });
-    app.post('/wshop/admin/product', upload.single('img') , function (req, res) {
-        var resultData = Object.create(utilResult.resultForm);
-        // 제품 정보등의 정보를 body로 부터 받는다.
-        models.productInfo.create({name: req.body.prodName, price: req.body.prodPrice, img:req.file.filename,
-            stock: req.body.stock, position:req.body.position, category: req.body.category,
-            regDate: dateUtil.doGetNowToTimeStamp(), updateDate: dateUtil.doGetNowToTimeStamp()}, {logging: log.debug})
-            .then(function (value) {
-                console.log('success', value);
-                resultData.msg = "insert complete";
-                resultData.isProcess = true;
+    app.route('/wshop/admin/product')
+        .get(function (req, res) {
+            var resultData = Object.create(utilResult.resultForm);
+            //여기서 제품 카테고리 정보를 가져와야 합니다.
+            models.codeInfo.findAll({
+                where: {
+                    'code_name': 'prodCategory'
+                }
             })
-            .catch(function (value) {
-                console.log('fail', value);
-                resultData.msg = "insert not complete";
-                resultData.isProcess = false;
-            });
-        resultData.isData = {file: req.file, name: req.body.name};
-        //////multer end//////////
-        pageSet.doGetResultPage(req, res, resultData);
-    });
+            .then(function (value) {
+                for (var idx in value) {
+                    value[idx].codeText = res.__(value[idx].codeText);
+                }
+                resultData.isData = {category: value};
+                resultData.viewPage = 'admin/product';
+                pageSet.doGetResultPage(req, res, resultData);
+            })
+        })
+        .post(upload.single('img') , function (req, res) {
+            var resultData = Object.create(utilResult.resultForm);
+            // 제품 정보등의 정보를 body로 부터 받는다.
+            models.productInfo.create({name: req.body.prodName, price: req.body.prodPrice, img:req.file.filename,
+                stock: req.body.prodStock, position:req.body.prodPosition, category: req.body.prodCategory,
+                regDate: dateUtil.doGetNowToTimeStamp(), updateDate: dateUtil.doGetNowToTimeStamp()}, {logging: log.debug})
+                .then(function (value) {
+                    console.log('success', value);
+                    resultData.msg = "insert complete";
+                    resultData.isProcess = true;
+                })
+                .catch(function (value) {
+                    console.log('fail', value);
+                    resultData.msg = "insert not complete";
+                    resultData.isProcess = false;
+                });
+            resultData.isData = {file: req.file, name: req.body.name};
+            //////multer end//////////
+            pageSet.doGetResultPage(req, res, resultData);
+        });
 };
