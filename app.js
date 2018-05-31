@@ -43,8 +43,12 @@ app.use(session({
  * 지금은 특정모드를 확인하기 위해서 web에서 걸리게 만들어야 한다.
  */
 app.all('/wshop/web*', function (req, res, next) {
-    console.log('path', req.route.path);
-    console.log('check a', req.session.userIdSession);
+    doGetUserSession(req, res, next);
+});
+app.all('/wshop/admin*', function (req, res, next) {
+    doGetUserSession(req, res, next);
+});
+function doGetUserSession(req, res, next) {
     if(req.session.userIdSession == undefined) {
         console.log('not login');
         res.redirect('/wshop/common/login');
@@ -52,8 +56,7 @@ app.all('/wshop/web*', function (req, res, next) {
     else {
         next();
     }
-});
-
+}
 //sequelize setting
 var models = require('./models'); //추가한 부분.
 
