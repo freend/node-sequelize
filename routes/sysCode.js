@@ -1,5 +1,8 @@
 "use stricts";
 const models = require('../models');
+const listSet = require('../customUtil/utilList');
+const utilResult = require('../customUtil/utilResult');
+const pageSet = require('../customUtil/responsePage');
 
 // 1page view number
 const pageListNum = 10;
@@ -79,16 +82,19 @@ module.exports = function (app, log) {
      */
     app.get('/syscode/list/:pageNum', function (req, res) {
         const pageNum = req.params.pageNum;
-        startNum = (pageNum - 1) * pageListNum;
+        const listArea = listSet.doGetListArea(pageNum);
+        var resultData = Object.create(utilResult.resultForm);
         models.codeInfo.findAndCountAll({
                 distinct: true,
                 col: 'code_name',
                 attributes: [[models.sequelize.fn('DISTINCT', models.sequelize.col('code_name')), 'codeName'], ['code_title', 'codeTitle']],
-                offset: startNum,
-                limit: pageListNum
+                offset: listArea.startNum,
+                limit: listArea.endNum
             }).then(function (value) {
-            value.pageNum = pageNum;
-            res.json(value);
+            resultData.msg = "call category list";
+            resultData.isProcess = true;
+            resultData.isData = {list: value.rows, currentPage: Number(pageNum), totalPage: Math.ceil(value.count / listArea.endNum)};
+            pageSet.doGetResultPage(req, res, resultData);
         });
     });
 };
