@@ -1,0 +1,7 @@
+<div text-align = "center">
+    <ul class = "pagination" >
+        <%for(var i = 1; i <= pageNum; i++) {%>
+        <li><input class = "btn btn-block" type = "button" onClick = doSearch(<%=i%>) value = "<%=i%>"></li>
+        <%}%>
+    </ul>
+</div>
