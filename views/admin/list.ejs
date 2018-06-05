@@ -1,0 +1,44 @@
+<%- include('../common/head'); %>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <td>
+                    number
+                </td>
+                <td>
+                    name
+                </td>
+                <td>
+                    수량
+                </td>
+                <td>
+                    분류
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(var i=0; i < isData.list.length; i++){%>
+            <tr>
+                <td>
+                    <%= i + isData.startNum + 1%>
+                </td>
+                <td>
+                    <a href="/wshop/product/<%= isData.list[i].seq%>"><%= isData.list[i].name%></a>
+                </td>
+                <td>
+                    <%= isData.list[i].stock%>
+                </td>
+                <td>
+                    <%= isData.list[i].codeInfos[0]['codeText']%>
+                </td>
+            </tr>
+            <%}%>
+        </tbody>
+    </table>
+</div>
+    <% if(isData.totalPage != 1) {%>
+    <%- include('../common/page'); %>
+    <%}%>
+</body>
+</html>
