@@ -1,8 +1,13 @@
 "use stricts";
+/**
+ * table join.
+ * reference url : https://lorenstewart.me/2016/09/12/sequelize-table-associations-joins/
+ */
 const models = require('../../models');
 const dateUtil = require('../../customUtil/utilDateTime');
 const utilResult = require('../../customUtil/utilResult');
 const pageSet = require('../../customUtil/responsePage');
+const listSet = require('../../customUtil/utilList');
 const common = require('../../customUtil/common');
 const multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
 // reference url : https://wayhome25.github.io/nodejs/2017/02/21/nodejs-15-file-upload/
@@ -19,12 +24,41 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+models.productInfo.hasMany(models.codeInfo, {foreignKey: 'code_index', sourceKey: 'product_category'});
+
 module.exports = function (app, log) {
-    app.get('/wshop/admin/product/list', function (req, res) {
+    app.get('/wshop/admin/product/list/:pageNum', function (req, res) {
+        console.log(req.route.path, req.params.pageNum);
+        const pageNum = req.params.pageNum;
+        const listArea = listSet.doGetListArea(pageNum);
         var resultData = Object.create(utilResult.resultForm);
-        resultData.msg = "call product list";
-        resultData.isProcess = true;
-        pageSet.doGetResultPage(req, res, resultData);
+
+        models.productInfo.findAndCountAll({
+            offset: listArea.startNum,
+            limit: listArea.endNum,
+            include: {
+                model: models.codeInfo
+            }
+            // attributes: ['seq', 'name', [['codeInfos'][0]['dataValues']['codeText'], 'cate']]
+        })
+            .then(function (value) {
+                resultData.msg = "call product list";
+                resultData.isProcess = true;
+                for (var idx in value.rows) {
+                    console.log("check value ", value.rows[idx]['codeInfos'][0]['dataValues']['codeText']);
+                    value.rows[idx]['codeInfos'][0]['dataValues']['codeText'] = res.__(value.rows[idx]['codeInfos'][0]['dataValues']['codeText']);
+                }
+                resultData.isData = {list: value.rows, currentPage: Number(pageNum),
+                    totalPage: Math.ceil(value.count / listArea.endNum), startNum: listArea.startNum};
+                // resultData.viewPage = "admin/list";
+                pageSet.doGetResultPage(req, res, resultData);
+            })
+            .catch(function (value) {
+                resultData.msg = "server error";
+                resultData.isProcess = false;
+                resultData.errorMsg = value;
+                pageSet.doGetResultPage(req, res, resultData);
+            });
     });
     app.route('/wshop/admin/product')
         .get(function (req, res) {
