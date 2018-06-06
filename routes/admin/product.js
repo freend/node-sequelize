@@ -11,6 +11,7 @@ const listSet = require('../../customUtil/utilList');
 const common = require('../../customUtil/common');
 const multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
 // reference url : https://wayhome25.github.io/nodejs/2017/02/21/nodejs-15-file-upload/
+// reference url : http://docs.sequelizejs.com/manual/tutorial/associations.html
 // 현재 상태는 단순히 업로드 경로를 지정해주는 기능만을 가지고 있다.
 // const upload = multer({ dest: 'public/img' });
 // 추가 기능을 넣어줍니다.
@@ -36,21 +37,21 @@ module.exports = function (app, log) {
         models.productInfo.findAndCountAll({
             offset: listArea.startNum,
             limit: listArea.endNum,
+            order: [['seq', 'DESC']],
             include: {
                 model: models.codeInfo
             }
-            // attributes: ['seq', 'name', [['codeInfos'][0]['dataValues']['codeText'], 'cate']]
+            // , attributes: ['seq', 'name', ['codeInfos'.'codeText']]
         })
             .then(function (value) {
                 resultData.msg = "call product list";
                 resultData.isProcess = true;
                 for (var idx in value.rows) {
-                    console.log("check value ", value.rows[idx]['codeInfos'][0]['dataValues']['codeText']);
                     value.rows[idx]['codeInfos'][0]['dataValues']['codeText'] = res.__(value.rows[idx]['codeInfos'][0]['dataValues']['codeText']);
                 }
                 resultData.isData = {list: value.rows, currentPage: Number(pageNum),
                     totalPage: Math.ceil(value.count / listArea.endNum), startNum: listArea.startNum};
-                // resultData.viewPage = "admin/list";
+                resultData.viewPage = "admin/list";
                 pageSet.doGetResultPage(req, res, resultData);
             })
             .catch(function (value) {
@@ -59,6 +60,29 @@ module.exports = function (app, log) {
                 resultData.errorMsg = value;
                 pageSet.doGetResultPage(req, res, resultData);
             });
+    });
+    app.get('/wshop/admin/product/:seq', function (req, res) {
+        // 제품 상세페이지 입니다.
+        console.log(req.route.path, req.params.seq);
+        var resultData = Object.create(utilResult.resultForm);
+        models.productInfo.findOne({
+                where: {
+                    'product_seq': req.params.seq
+                }
+            })
+            .then(function (value) {
+                resultData.msg = "call product";
+                resultData.isProcess = true;
+                resultData.isData = {product: value};
+                // resultData.viewPage = "admin/list";
+                pageSet.doGetResultPage(req, res, resultData);
+            })
+            .catch(function (value) {
+                resultData.msg = "server error";
+                resultData.isProcess = false;
+                resultData.errorMsg = value;
+                pageSet.doGetResultPage(req, res, resultData);
+            })
     });
     app.route('/wshop/admin/product')
         .get(function (req, res) {
