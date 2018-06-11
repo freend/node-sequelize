@@ -9,6 +9,9 @@ const utilResult = require('../../customUtil/utilResult');
 const pageSet = require('../../customUtil/responsePage');
 const listSet = require('../../customUtil/utilList');
 const common = require('../../customUtil/common');
+const async = require('async');
+//path
+const path = require('path');
 const multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
 // reference url : https://wayhome25.github.io/nodejs/2017/02/21/nodejs-15-file-upload/
 // reference url : http://docs.sequelizejs.com/manual/tutorial/associations.html
@@ -65,44 +68,131 @@ module.exports = function (app, log) {
         // 제품 상세페이지 입니다.
         console.log(req.route.path, req.params.seq);
         var resultData = Object.create(utilResult.resultForm);
-        models.productInfo.findOne({
-                where: {
-                    'product_seq': req.params.seq
-                }
-            })
-            .then(function (value) {
-                resultData.msg = "call product";
-                resultData.isProcess = true;
-                resultData.isData = {product: value};
-                // resultData.viewPage = "admin/list";
-                pageSet.doGetResultPage(req, res, resultData);
-            })
-            .catch(function (value) {
-                resultData.msg = "server error";
-                resultData.isProcess = false;
-                resultData.errorMsg = value;
-                pageSet.doGetResultPage(req, res, resultData);
-            })
+        //TODO-freend : 이제 여기서도 카테고리와 보관위치를 추가해줘야 합니다.
+        async.parallel([
+            function (callback) {
+                //여기서 제품 카테고리 정보를 가져와야 합니다.
+                models.codeInfo.findAll({
+                    where: {
+                        'code_name': 'prodCategory'
+                    }
+                })
+                    .then(function (value) {
+                        for (var idx in value) {
+                            value[idx].codeText = res.__(value[idx].codeText);
+                        }
+                        resultData.isProcess = true;
+                        callback(null, value);
+                    })
+                    .catch(function (value) {
+                        resultData.isProcess = false;
+                        callback(null, value);
+                    })
+            },
+            function (callback) {
+                models.codeInfo.findAll({
+                    where: {
+                        'code_name': 'cargoInfo'
+                    }
+                })
+                    .then(function (value) {
+                        for (var idx in value) {
+                            value[idx].codeText = res.__(value[idx].codeText);
+                        }
+                        resultData.isProcess = true;
+                        callback(null, value);
+                    })
+                    .catch(function (value) {
+                        resultData.isProcess = false;
+                        callback(null, value);
+                    })
+            },
+            function (callback) {
+                models.productInfo.findOne({
+                    where: {
+                        'product_seq': req.params.seq
+                    }
+                })
+                    .then(function (value) {
+                        resultData.msg = "call product";
+                        resultData.isProcess = true;
+                        callback(null, value);
+                    })
+                    .catch(function (value) {
+                        resultData.msg = "server error";
+                        resultData.isProcess = false;
+                        resultData.errorMsg = value;
+                        callback(null, value);
+                    })
+            }
+        ], function (err, results) {
+            if(resultData.isProcess == true) {
+                console.log('check', req.url);
+
+                resultData.isData = {category: results[0], position: results[1], product: results[2]};
+                resultData.viewPage = 'admin/product';
+            }
+            else {
+                console.log('error', err);
+            }
+            pageSet.doGetResultPage(req, res, resultData);
+        });
     });
     app.route('/wshop/admin/product')
         .get(function (req, res) {
             var resultData = Object.create(utilResult.resultForm);
-            //여기서 제품 카테고리 정보를 가져와야 합니다.
-            models.codeInfo.findAll({
-                where: {
-                    'code_name': 'prodCategory'
+            async.parallel([
+                function (callback) {
+                    //여기서 제품 카테고리 정보를 가져와야 합니다.
+                    models.codeInfo.findAll({
+                        where: {
+                            'code_name': 'prodCategory'
+                        }
+                    })
+                        .then(function (value) {
+                            for (var idx in value) {
+                                value[idx].codeText = res.__(value[idx].codeText);
+                            }
+                            resultData.isProcess = true;
+                            callback(null, value);
+                        })
+                        .catch(function (value) {
+                            resultData.isProcess = false;
+                            callback(null, value);
+                        })
+                },
+                function (callback) {
+                    models.codeInfo.findAll({
+                        where: {
+                            'code_name': 'cargoInfo'
+                        }
+                    })
+                        .then(function (value) {
+                            for (var idx in value) {
+                                value[idx].codeText = res.__(value[idx].codeText);
+                            }
+                            resultData.isProcess = true;
+                            callback(null, value);
+                        })
+                        .catch(function (value) {
+                            resultData.isProcess = false;
+                            callback(null, value);
+                        })
                 }
-            })
-            .then(function (value) {
-                for (var idx in value) {
-                    value[idx].codeText = res.__(value[idx].codeText);
+            ], function (err, results) {
+                if(resultData.isProcess == true) {
+                    resultData.isData = {category: results[0], position: results[1]};
+                    resultData.viewPage = 'admin/product';
                 }
-                resultData.isData = {category: value};
-                resultData.viewPage = 'admin/product';
+                else {
+                    console.log('error', err);
+                }
                 pageSet.doGetResultPage(req, res, resultData);
-            })
+            });
+
+
         })
-        .post(upload.single('img') , function (req, res) {
+        .post(upload.single('prodImg') , function (req, res) {
             var resultData = Object.create(utilResult.resultForm);
             // 제품 정보등의 정보를 body로 부터 받는다.
             models.productInfo.create({name: req.body.prodName, price: req.body.prodPrice, img:req.file.filename,
